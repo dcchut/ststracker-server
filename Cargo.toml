@@ -1,0 +1,19 @@
+[package]
+name = "ststracker-server"
+version = "0.2.0"
+authors = ["Robert Usher <266585+dcchut@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+actix-web = "1.0.5"
+actix-cors = "0.1.0"
+actix-http = "0.2.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+frank_jwt = "3.1.1"
+redis = "0.11.0"
+futures = "0.1.28"
+base64 = "0.10.1"
+libsts = "0.1.0"
+itsdangerous = "0.3.1"
+config = "0.9.3"
