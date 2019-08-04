@@ -1,3 +1,5 @@
+#![deny(clippy::let_unit_value)]
+
 use redis::{Commands, Connection, RedisResult};
 
 pub struct ApplicationState {

@@ -64,10 +64,10 @@ pub fn update(
     // Verify that the key is valid
     if let Ok(channel_id) = signer.unsign(&update.key) {
         // Update the cards / relics for this channel id
-        let update = GetRequest::new(update.cards, update.relics);
-        let update_response = serde_json::to_string(&update).unwrap();
+        let get_request = GetRequest::new(update.cards, update.relics);
+        let get_request = serde_json::to_string(&get_request).unwrap();
 
-        if state.set(channel_id, &update_response).is_ok() {
+        if state.set(channel_id, &get_request).is_ok() {
             HttpResponse::Ok().finish()
         } else {
             HttpResponse::InternalServerError().finish()

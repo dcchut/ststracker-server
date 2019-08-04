@@ -2,5 +2,6 @@ pub mod api;
 pub mod application;
 pub mod twitch;
 
-pub use api::{GetAPIKeyResponse, GetRequest, UpdateRequest};
+pub use api::GetAPIKeyResponse;
 pub use application::ApplicationState;
+pub use ststracker_base::{GetRequest, UpdateRequest};
