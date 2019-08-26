@@ -6,7 +6,8 @@ use futures::IntoFuture;
 use itsdangerous::{default_builder, Signer};
 
 use crate::model::twitch::verify_auth_header;
-use crate::model::{ApplicationState, GetAPIKeyResponse, GetRequest, UpdateRequest};
+use crate::model::{ApplicationState, GetAPIKeyResponse, UpdateRequest};
+use ststracker_base::api::GameState;
 
 pub fn get(
     state: Data<Mutex<ApplicationState>>,
@@ -19,8 +20,8 @@ pub fn get(
             let channel_data = state.get(payload.channel_id());
 
             if let Ok(channel_data) = channel_data {
-                if let Ok(channel_data) = serde_json::from_str::<GetRequest>(&channel_data) {
-                    return HttpResponse::Ok().json(channel_data);
+                if let Ok(game_state) = serde_json::from_str::<GameState>(&channel_data) {
+                    return HttpResponse::Ok().json(game_state);
                 }
             }
 
@@ -64,10 +65,9 @@ pub fn update(
     // Verify that the key is valid
     if let Ok(channel_id) = signer.unsign(&update.key) {
         // Update the cards / relics for this channel id
-        let get_request = GetRequest::new(update.cards, update.relics);
-        let get_request = serde_json::to_string(&get_request).unwrap();
+        let json = serde_json::to_string(update.game_state()).unwrap();
 
-        if state.set(channel_id, &get_request).is_ok() {
+        if state.set(channel_id, &json).is_ok() {
             HttpResponse::Ok().finish()
         } else {
             HttpResponse::InternalServerError().finish()

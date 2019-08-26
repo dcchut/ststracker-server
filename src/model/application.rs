@@ -1,5 +1,3 @@
-#![deny(clippy::let_unit_value)]
-
 use redis::{Commands, Connection, RedisResult};
 
 pub struct ApplicationState {
@@ -26,19 +24,24 @@ impl ApplicationState {
 }
 
 impl ApplicationState {
+    /// Stores a value in the application database.
+    #[allow(clippy::let_unit_value)]
     pub fn set(&mut self, key: &str, value: &str) -> RedisResult<()> {
         let _ = self.store.set(key, value)?;
         Ok(())
     }
 
+    /// Get a value from the application database.
     pub fn get(&mut self, key: &str) -> Result<String, redis::RedisError> {
         self.store.get(key)
     }
 
+    /// The twitch secret key associated with the current state.
     pub fn twitch_secret_key(&self) -> &str {
         &self.twitch_secret_key
     }
 
+    /// The backend secret key associated with the current state.
     pub fn backend_secret_key(&self) -> &'static str {
         &self.backend_secret_key
     }
